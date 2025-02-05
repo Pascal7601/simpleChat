@@ -2,6 +2,7 @@ from websockets.server import serve
 import asyncio
 from uuid import uuid4
 import json
+import os
 
 
 clients = {}
@@ -38,9 +39,10 @@ async def broadcast(message, sender):
     
 
 async def main():
-  async with serve(handler, "localhost", 9090) as server:
-    print("running on ws:localhost:9090....")
-    await server.serve_forever()
+    port = int(os.getenv("PORT", 8000))
+    async with serve(handler, "0.0.0.0", port) as server:
+        print("running on ws:localhost:9090....")
+        await server.serve_forever()
 
 if __name__ == "__main__":
   asyncio.run(main())
