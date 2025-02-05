@@ -20,7 +20,7 @@ function signIn() {
   displayName.textContent = username;
 
   // Connect to WebSocket
-  ws = new WebSocket("wss://simplechat-3.onrender.com:8000");
+  ws = new WebSocket("wss://simplechat-3.onrender.com");
 
   ws.onopen = () => {
     console.log("Connected to WebSocket server.");
