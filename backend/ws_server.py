@@ -3,11 +3,17 @@ import asyncio
 from uuid import uuid4
 import json
 import os
+import aioredis
 
 
+REDIS_URL = "redis://localhost:6379"
 clients = {}
 
+async def get_redis():
+    return await aioredis.from_url(REDIS_URL, decode_responses=True)
+
 async def handler(websocket):
+    r = await get_redis()
     # Receive first message (user name)
     first_message = await websocket.recv()
     data = json.loads(first_message)
@@ -17,22 +23,33 @@ async def handler(websocket):
         clients[websocket] = name
         print(f"{name} joined the chat.")
 
+        # send the last 10 messages from the rdb
+        messages = await r.lrange("chat_messages", -10, -1)
+        for msg in messages:
+            await websocket.send(msg)
+
         # Notify all clients
-        await broadcast(f"{name} joined the chat!", "Server")
+        await broadcast(f"{name} joined the chat!", "Server", r)
 
     try:
         async for message in websocket:
             data = json.loads(message)
-            await broadcast(data["message"], data["name"])
+            chat_message = json.dumps({"name": data["name"], "message": data["message"]})
+
+            # Store message in Redis
+            await r.rpush("chat_messages", chat_message)
+            await r.ltrim("chat_messages", -50, -1)  # Keep only last 50 messages
+
+            await broadcast(data["message"], data["name"], r)
     except:
         pass
     finally:
         if websocket in clients:
             name = clients.pop(websocket)
             print(f"{name} left the chat.")
-            await broadcast(f"{name} left the chat.", "Server")
+            await broadcast(f"{name} left the chat.", "Server", r)
 
-async def broadcast(message, sender):
+async def broadcast(message, sender, r):
     data = json.dumps({"name": sender, "message": message})
     for client in clients:
             await client.send(data)
