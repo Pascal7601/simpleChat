@@ -3,14 +3,15 @@ import asyncio
 from uuid import uuid4
 import json
 import os
-import aioredis
+import redis.asyncio as redis
+
 
 
 REDIS_URL = "redis://red-cuiai9lds78s73dvbmag:6379"
 clients = {}
 
 async def get_redis():
-    return await aioredis.from_url(REDIS_URL, decode_responses=True)
+    return await redis.from_url(REDIS_URL, decode_responses=True)
 
 async def handler(websocket):
     r = await get_redis()
