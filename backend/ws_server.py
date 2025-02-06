@@ -34,9 +34,8 @@ async def handler(websocket):
 
 async def broadcast(message, sender):
     data = json.dumps({"name": sender, "message": message})
-    for client_conn, user in clients.items():
-        if sender != user:
-            await client_conn.send(data)
+    for client in clients:
+            await client(data)
     
 
 async def main():
