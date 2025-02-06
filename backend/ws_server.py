@@ -6,7 +6,7 @@ import os
 import aioredis
 
 
-REDIS_URL = "redis://localhost:6379"
+REDIS_URL = "redis://red-cuiai9lds78s73dvbmag:6379"
 clients = {}
 
 async def get_redis():
