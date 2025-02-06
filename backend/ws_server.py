@@ -35,7 +35,7 @@ async def handler(websocket):
 async def broadcast(message, sender):
     data = json.dumps({"name": sender, "message": message})
     for client in clients:
-            await client(data)
+            await client.send(data)
     
 
 async def main():
