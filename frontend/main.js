@@ -10,7 +10,7 @@ function signIn() {
     document.getElementById("loginContainer").classList.add("hidden");
     document.getElementById("usersContainer").classList.remove("hidden");
 
-    socket = new WebSocket("ws://localhost:8000");
+    socket = new WebSocket("wss://simplechat-3.onrender.com");
 
     socket.onopen = () => {
         socket.send(JSON.stringify({ type: "join", name: username }));
