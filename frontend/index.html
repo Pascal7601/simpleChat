@@ -19,6 +19,7 @@
       padding: 20px;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
     }
     .hidden {
       display: none;
@@ -29,6 +30,7 @@
       border: 1px solid #ccc;
       padding: 10px;
       margin-bottom: 10px;
+      text-align: left;
     }
     .message {
       padding: 8px;
@@ -53,22 +55,58 @@
       padding: 10px;
       cursor: pointer;
     }
+    .user-list {
+      list-style: none;
+      padding: 0;
+      text-align: left;
+    }
+    .user-list li {
+      padding: 10px;
+      cursor: pointer;
+      border-bottom: 1px solid #ddd;
+    }
+    .user-list li:hover {
+      background: #eee;
+    }
   </style>
 </head>
 <body>
+
+  <!-- Login Container -->
   <div class="container" id="loginContainer">
-    <h3>Enter your name..<span>made with ❤️ by pascal</span></h3>
+    <h3>Enter your name..<span>made with ❤️ by Pascal</span></h3>
     <input type="text" id="usernameInput" placeholder="Your Name" />
     <button onclick="signIn()">Join Chat</button>
   </div>
 
+  <!-- Active Users Container -->
+  <div class="container hidden" id="usersContainer">
+    <h3>Active Users</h3>
+    <button onclick="openGroupChat()">Group Chat</button>
+    <ul class="user-list" id="activeUsersList"></ul>
+  </div>
+
+  <!-- Group Chat Container -->
   <div class="container hidden" id="chatContainer">
     <h3>Welcome, <span id="displayName"></span>!</h3>
     <div class="chat-box" id="chatBox"></div>
     <input type="text" id="messageInput" placeholder="Type a message..." />
     <button onclick="sendMessage()">Send</button>
+    <button onclick="backFromGroupChat()">Back to Users</button>
+
+  </div>
+
+  <!-- Private Chat Container -->
+  <div class="container hidden" id="privateChatContainer">
+    <h3>Chat with <span id="privateChatUser"></span></h3>
+    <div class="chat-box" id="privateChatBox"></div>
+    <input type="text" id="privateMessageInput" placeholder="Type a message..." />
+    <button onclick="sendPrivateMessage()">Send</button>
+    <br>
+    <button onclick="backToUsers()">Back</button>
   </div>
 
   <script src="main.js"></script>
+
 </body>
 </html>
